@@ -32,6 +32,30 @@ std::ostream& operator<<(std::ostream & os, const Color & color)
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                 SVGElement                  ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// Constructors
+
+SVGElement::SVGElement()
+{
+	//
+}
+
+
+// Operator overloads
+
+std::ostream& operator<<(std::ostream & os, const SVGElement & element)
+{
+	element.print(os);
+	return os;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGRect                   ////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,22 +77,18 @@ SVGRect::SVGRect(double x, double y, double width, double height, const Color & 
 }
 
 
-// Operator overloads
+// Methods
 
-std::ostream& operator<<(std::ostream & os, const SVGRect & rect)
+void SVGRect::print(std::ostream & os) const
 {
 	os  << "<rect ";
-	streamAttribute(os, "x", rect.m_x);	
-	streamAttribute(os, "y", rect.m_y);
-	streamAttribute(os, "width", rect.m_width);
-	streamAttribute(os, "height", rect.m_height);
-	streamAttribute(os, "fill", rect.m_fill_color);
+	streamAttribute(os, "x", m_x);	
+	streamAttribute(os, "y", m_y);
+	streamAttribute(os, "width", m_width);
+	streamAttribute(os, "height", m_height);
+	streamAttribute(os, "fill", m_fill_color);
 	os << "/>\n";
-
-	return os;
 }
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGLine                   ////////////////////////
@@ -92,21 +112,19 @@ SVGLine::SVGLine(double x1, double y1, double x2, double y2, double thickness, c
 }
 
 
-// Operator overloads
+// Methods
 
-std::ostream& operator<<(std::ostream & os, const SVGLine & line)
+void SVGLine::print(std::ostream & os) const
 {
 	os  << "<line ";
-	streamAttribute(os, "x1", line.m_x1);	
-	streamAttribute(os, "y1", line.m_y1);
-	streamAttribute(os, "x2", line.m_x2);	
-	streamAttribute(os, "y2", line.m_y2);
-	streamAttribute(os, "stroke-width", line.m_thickness);
-	streamAttribute(os, "stroke", line.m_stroke_color);
+	streamAttribute(os, "x1", m_x1);	
+	streamAttribute(os, "y1", m_y1);
+	streamAttribute(os, "x2", m_x2);	
+	streamAttribute(os, "y2", m_y2);
+	streamAttribute(os, "stroke-width", m_thickness);
+	streamAttribute(os, "stroke", m_stroke_color);
 	streamAttribute(os, "style", "stroke-linecap:round;stroke-linejoin:miter");
 	os << "/>\n";
-
-	return os;
 }
 
 
@@ -116,9 +134,7 @@ std::ostream& operator<<(std::ostream & os, const SVGLine & line)
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 template<class T>
-std::ostream& streamAttribute(std::ostream & os, const std::string& attribute_name, const T & attribute_value)
+void streamAttribute(std::ostream & os, const std::string& attribute_name, const T & attribute_value)
 {
 	os << attribute_name << "=\"" << attribute_value << "\" ";
-
-	return os;
 }
