@@ -1,0 +1,7 @@
+SET(EXE_SRC
+    main
+)
+
+FOREACH(FILE ${EXE_SRC})
+  add_executable(${FILE} ${FILE}.cpp ${SOURCE_BASE_FILES} ${SOURCE_BASE_HEADER_FILES} )
+ENDFOREACH(FILE)
