@@ -1,1 +1,72 @@
 #pragma once
+
+#include <cstdint>
+#include <iostream>
+#include <string>
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                    Color                    ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+struct Color
+{
+	// Constructors
+
+	Color();
+
+	Color(unsigned short r, unsigned short g, unsigned short b);
+
+	// Operator overload
+
+	friend std::ostream& operator<<(std::ostream & os, const Color & color);
+
+	// Members
+	unsigned short m_red;
+	unsigned short m_green;
+	unsigned short m_blue;
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                   SVGRect                   ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+class SVGRect
+{
+public:
+	// Constructors
+
+	SVGRect();
+
+	SVGRect(double x, double y, double width, double height, Color fill_color);
+
+	// Operator overloads
+
+	friend std::ostream& operator<<(std::ostream & os, const SVGRect & rect);
+
+private:
+	// Members
+	double m_x;
+	double m_y;
+	double m_width;
+	double m_height;
+	Color m_fill_color;
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////               Other functions               ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+template<class T>
+std::ostream& streamAttribute(std::ostream & os, const std::string& attribute_name, const T & attribute_value);
