@@ -56,6 +56,61 @@ std::ostream& operator<<(std::ostream & os, const SVGElement & element)
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                   SVGSvg                    ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Constructors
+
+SVGSvg::SVGSvg()
+	: m_x(), m_y(), m_width(), m_height()
+{
+	//
+}
+
+
+SVGSvg::SVGSvg(double x, double y, double width, double height)
+	: m_x(x), m_y(y), m_width(width), m_height(height)
+{
+
+}
+
+
+// Methods
+
+void SVGSvg::print(std::ostream & os) const
+{
+	// open the svg tag ( <svg ...> )
+ 	os  << "<svg ";
+	streamAttribute(os, "width", 15, "cm");
+	streamAttribute(os, "height", 15, "cm");
+
+	os << "viewBox=\"" << m_x << " " << m_y << " " << m_width << " " << m_height << "\" ";
+
+	streamAttribute(os, "xmlns", "http://www.w3.org/2000/svg");
+	os << ">\n";
+
+	// the SVG elements contained withing the svg tag ( <svg> ... </svg> )
+
+	for(std::shared_ptr<SVGElement> ptr_e : m_contained_elements)
+	{
+		ptr_e->print(os);
+	}
+
+	// close the svg tag ( </svg> )
+	os << "</svg>\n";
+}
+
+
+void SVGSvg::addElement(const std::shared_ptr<SVGElement> & ptr_element)
+{
+	m_contained_elements.push_back(ptr_element);
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGRect                   ////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +124,7 @@ SVGRect::SVGRect()
 {
 
 }
+
 
 SVGRect::SVGRect(double x, double y, double width, double height, const Color & fill_color)
 	: m_x(x), m_y(y), m_width(width), m_height(height), m_fill_color(fill_color)
@@ -89,6 +145,8 @@ void SVGRect::print(std::ostream & os) const
 	streamAttribute(os, "fill", m_fill_color);
 	os << "/>\n";
 }
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGLine                   ////////////////////////
@@ -134,7 +192,10 @@ void SVGLine::print(std::ostream & os) const
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 template<class T>
-void streamAttribute(std::ostream & os, const std::string& attribute_name, const T & attribute_value)
+void streamAttribute(std::ostream & os,
+					const std::string& attribute_name,
+					const T & attribute_value,
+					const std::string & attribute_unit)
 {
-	os << attribute_name << "=\"" << attribute_value << "\" ";
+	os << attribute_name << "=\"" << attribute_value << attribute_unit << "\" ";
 }

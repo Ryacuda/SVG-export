@@ -3,7 +3,9 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
-
+#include <vector>
+#include <memory>
+#include <fstream>
 
 
 
@@ -91,12 +93,64 @@ public:
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                   SVGSvg                    ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * @brief SVG svg, inherits from SVGElement
+ * @brief Represents the <svg> ... </svg> tag
+ * @brief Also acts as a container of other svg elements
+ **/
+class SVGSvg : public SVGElement
+{
+public:
+	// Constructors
+
+	/**
+	 * @brief Constructor, initializes all members with default constructor
+	 **/
+	SVGSvg();
+
+	/**
+	 * @brief Constructor, initializes all members with parameters
+	 * @param x The x coordinate of the top left corner of the SVG
+	 * @param y The y coordinate of the top left corner of the SVG
+	 * @param width The width of the SVG
+	 * @param height The height of the SVG
+	 **/
+	SVGSvg(double x, double y, double width, double height);
+
+	// Methods
+
+	/**
+	 * @brief Implementation of the pure virtual function from SVGElement
+	 * @brief Outputs the SVGSvg to the stream parameter 
+	 * @param os The output stream
+	 **/
+	void print(std::ostream & os) const;
+
+	void addElement(const std::shared_ptr<SVGElement> & ptr_element);
+
+private:
+	// Members
+	double m_x;					// Top left corner x coordinate
+	double m_y;					// Top left corner y coordinate
+	double m_width;				// SVG width
+	double m_height;			// SVG height
+	std::vector< std::shared_ptr<SVGElement> > m_contained_elements;	// svg elements within the svg tags
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGRect                   ////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /**
  * @brief SVG rectangle, inherits from SVGElement
+ * @brief Represents the <rect> ... </rect> tag
  **/
 class SVGRect : public SVGElement
 {
@@ -145,6 +199,7 @@ private:
 
 /**
  * @brief SVG line, inherits from SVGElement
+ * @brief Represents the <line> ... </line> tag
  **/
 class SVGLine : public SVGElement
 {
@@ -197,4 +252,7 @@ private:
  * @param attribute_value The value associated to the attribute
  **/
 template<class T>
-void streamAttribute(std::ostream & os, const std::string& attribute_name, const T & attribute_value);
+void streamAttribute(std::ostream & os,
+					const std::string& attribute_name,
+					const T & attribute_value,
+					const std::string & attribute_unit = "");
