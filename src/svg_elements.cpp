@@ -1,61 +1,49 @@
-#include "export.h"
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////                    Color                    ////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// Constructors
-
-
-Color::Color()
-	: m_red(0), m_green(0), m_blue(0)
-{
-	//
-}
-
-
-Color::Color(unsigned short r, unsigned short g, unsigned short b)
-	: m_red(r), m_green(g), m_blue(b)
-{
-	//
-}
-
-
-// Operator overload
-
-std::ostream& operator<<(std::ostream & os, const Color & color)
-{
-	os << "rgb(" << color.m_red << "," << color.m_green << "," << color.m_blue << ")";
-
-	return os;
-}
-
+#include "svg_elements.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////                 SVGElement                  ////////////////////////
+////////////////////////                 SVGAnimate                  ////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 // Constructors
 
-SVGElement::SVGElement()
+SVGAnimate::SVGAnimate()
 {
 	//
 }
 
 
-// Operator overloads
+// Methods
 
-std::ostream& operator<<(std::ostream & os, const SVGElement & element)
+void SVGAnimate::print(std::ostream & os) const
 {
-	element.print(os);
-	return os;
+	//
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////             SVGAnimatedElement              ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// Constructors
+
+SVGAnimatedElement::SVGAnimatedElement()
+	: m_animations()
+{
+	//
+}
+
+// Methods
+
+void SVGAnimatedElement::addAnimation(const SVGAnimate & animation)
+{
+	m_animations.push_back(animation);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGSvg                    ////////////////////////
@@ -94,7 +82,7 @@ void SVGSvg::print(std::ostream & os) const
 
 	// the SVG elements contained withing the svg tag ( <svg> ... </svg> )
 
-	for(std::shared_ptr<SVGElement> ptr_e : m_contained_elements)
+	for(std::shared_ptr<SVGAnimatedElement> ptr_e : m_contained_elements)
 	{
 		ptr_e->print(os);
 	}
@@ -104,7 +92,7 @@ void SVGSvg::print(std::ostream & os) const
 }
 
 
-void SVGSvg::addElement(const std::shared_ptr<SVGElement> & ptr_element)
+void SVGSvg::addElement(const std::shared_ptr<SVGAnimatedElement> & ptr_element)
 {
 	m_contained_elements.push_back(ptr_element);
 }

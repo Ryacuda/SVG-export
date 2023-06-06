@@ -7,60 +7,21 @@
 #include <memory>
 #include <fstream>
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////                    Color                    ////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * @brief Color class to manage the components and it's output
- **/
-struct Color
-{
-	// Constructors
-
-	/**
-	 * @brief Constructor, initializes red, green and blue components to 0
-	 **/
-	Color();
-
-	/**
-	 * @brief Constructor, initializes red, green and blue components with parameters
-	 * @param r The value of the red component
-	 * @param g The value of the green component
-	 * @param b The value of the blue component
-	 **/
-	Color(unsigned short r, unsigned short g, unsigned short b);
-
-	// Operator overload
-
-	/**
-	 * @brief operator<< overload for displaying and file writing purpose
-	 * @param os The output stream
-	 * @param color The color to output
-	 * @returns The output stream
-	 **/
-	friend std::ostream& operator<<(std::ostream & os, const Color & color);
-
-	// Members
-	unsigned short m_red;		// Red color component
-	unsigned short m_green;		// Green color component
-	unsigned short m_blue;		// Blue color component
-};
+#include "svg_attributes.h"
 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////                 SVGElement                  ////////////////////////
+////////////////////////                 SVGAnimate                  ////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /**
- * @brief Abstract class, any SVG element will inherit from SVGElement (makes sense so far)
+ * @brief SVG animate element, inherits from Streamable
+ * @brief Convoluted class structure, but the logic is that an <animate> tag 
+ * @brief cannot have <animate> tags nested within
  **/
-class SVGElement
+class SVGAnimate : public Streamable
 {
 public:
 	// Constructors
@@ -68,26 +29,59 @@ public:
 	/**
 	 * @brief Constructor, initializes all members with default constructor
 	 **/
-	SVGElement();
+	SVGAnimate();
 
 	// Methods
 
 	/**
-	 * @brief Pure virtual method, output the SVGElement to the stream 
-	 * @brief (called by operator<<(std::ostream & os, const SVGElement & element) )
+	 * @brief Implementation of the pure virtual function from Streamable
+	 * @brief Outputs the SVGAnimate to the stream parameter 
+	 * @param os The output stream
+	 **/
+	void print(std::ostream & os) const;
+
+private:
+	bool m_calc_mode_spline;			// Wether the animate attribute clacMode is equal to "spline" or not
+	int m_repeat_count;					// Number of animation loops (value < 0 will be treated as "indefinite")
+	int m_duration;						// Duration of one animation loop (in milliseconds)
+
+};	
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////             SVGAnimatedElement              ////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * @brief SVG animated element, inherits from Streamable
+ * @brief Abstract class, any SVG element that support animation will inherit from SVGAnimatedElement
+ * @brief i.e elements that can have nested <animate> tags
+ **/
+class SVGAnimatedElement : public Streamable
+{
+public:
+	// Constructors
+
+	/**
+	 * @brief Constructor, initializes all members with default constructor
+	 **/
+	SVGAnimatedElement();
+
+	// Methods
+
+	/**
+	 * @brief Pure virtual method, output the SVGAnimatedElement to the stream 
+	 * @brief (called by operator<<(std::ostream & os, const Streamable & element) )
 	 * @param os The output stream
 	 **/
 	virtual void print(std::ostream & os) const = 0;
 
-	// Operator overloads
+	void addAnimation(const SVGAnimate & animation);
 
-	/**
-	 * @brief operator<< overload for displaying and file writing purpose
-	 * @param os The output stream
-	 * @param color The SVG element to output
-	 * @returns The output stream
-	 **/
-	friend std::ostream& operator<<(std::ostream & os, const SVGElement & element);
+private:
+	std::vector<SVGAnimate> m_animations;
 };
 
 
@@ -98,11 +92,11 @@ public:
 
 
 /**
- * @brief SVG svg, inherits from SVGElement
+ * @brief SVG svg, inherits from SVGAnimatedElement
  * @brief Represents the <svg> ... </svg> tag
  * @brief Also acts as a container of other svg elements
  **/
-class SVGSvg : public SVGElement
+class SVGSvg : public SVGAnimatedElement
 {
 public:
 	// Constructors
@@ -124,13 +118,13 @@ public:
 	// Methods
 
 	/**
-	 * @brief Implementation of the pure virtual function from SVGElement
+	 * @brief Implementation of the pure virtual function from SVGAnimatedElement
 	 * @brief Outputs the SVGSvg to the stream parameter 
 	 * @param os The output stream
 	 **/
 	void print(std::ostream & os) const;
 
-	void addElement(const std::shared_ptr<SVGElement> & ptr_element);
+	void addElement(const std::shared_ptr<SVGAnimatedElement> & ptr_element);
 
 private:
 	// Members
@@ -138,7 +132,7 @@ private:
 	double m_y;					// Top left corner y coordinate
 	double m_width;				// SVG width
 	double m_height;			// SVG height
-	std::vector< std::shared_ptr<SVGElement> > m_contained_elements;	// svg elements within the svg tags
+	std::vector< std::shared_ptr<SVGAnimatedElement> > m_contained_elements;	// svg elements within the svg tags
 };
 
 
@@ -149,10 +143,10 @@ private:
 
 
 /**
- * @brief SVG rectangle, inherits from SVGElement
+ * @brief SVG rectangle, inherits from SVGAnimatedElement
  * @brief Represents the <rect> ... </rect> tag
  **/
-class SVGRect : public SVGElement
+class SVGRect : public SVGAnimatedElement
 {
 public:
 	// Constructors
@@ -175,7 +169,7 @@ public:
 	// Methods
 
 	/**
-	 * @brief Implementation of the pure virtual function from SVGElement
+	 * @brief Implementation of the pure virtual function from SVGAnimatedElement
 	 * @brief Outputs the SVGRect to the stream parameter 
 	 * @param os The output stream
 	 **/
@@ -198,10 +192,10 @@ private:
 
 
 /**
- * @brief SVG line, inherits from SVGElement
+ * @brief SVG line, inherits from SVGAnimatedElement
  * @brief Represents the <line> ... </line> tag
  **/
-class SVGLine : public SVGElement
+class SVGLine : public SVGAnimatedElement
 {
 public:
 	// Constructors
@@ -225,7 +219,7 @@ public:
 	// Methods
 
 	/**
-	 * @brief Implementation of the pure virtual function from SVGElement
+	 * @brief Implementation of the pure virtual function from SVGAnimatedElement
 	 * @brief Outputs the SVGLine to the stream parameter 
 	 * @param os The output stream
 	 **/

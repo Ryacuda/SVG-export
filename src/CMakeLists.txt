@@ -1,5 +1,5 @@
 SET(EXE_SRC
-    main
+	main
 )
 
 FOREACH(FILE ${EXE_SRC})

@@ -3,15 +3,19 @@ PROJECT(CCO_Implementation)
 SET (CMAKE_CXX_STANDARD 11)
 
 SET(SOURCE_BASE_HEADER_FILES
-  ${PROJECT_SOURCE_DIR}/src/export.h  
+	${PROJECT_SOURCE_DIR}/src/svg_elements.h
+	${PROJECT_SOURCE_DIR}/src/svg_attributes.h
+	${PROJECT_SOURCE_DIR}/src/streamable.h
 )
 
 SET(SOURCE_BASE_FILES
-  ${PROJECT_SOURCE_DIR}/src/export.cpp
+	${PROJECT_SOURCE_DIR}/src/svg_elements.cpp
+	${PROJECT_SOURCE_DIR}/src/svg_attributes.cpp
+	${PROJECT_SOURCE_DIR}/src/streamable.cpp
 )
 
 INCLUDE_DIRECTORIES(
-    ${PROJECT_SOURCE_DIR}/src/
+	${PROJECT_SOURCE_DIR}/src/
 )
 
 ADD_SUBDIRECTORY(src)
