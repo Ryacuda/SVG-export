@@ -15,6 +15,17 @@ SVGAnimate::SVGAnimate()
 }
 
 
+SVGAnimate::SVGAnimate(const std::string & attribute_name,
+		       const int duration,
+		       const bool calc_mode_spline,	// = false
+			   const bool repeat_count,		// = 0
+			   const bool freeze)			// = false
+	: m_attribute_name(attribute_name), m_repeat_count(repeat_count), m_freeze(freeze), m_timeline(duration, calc_mode_spline)
+{
+	//
+}
+
+
 // Methods
 
 void SVGAnimate::print(std::ostream & os) const

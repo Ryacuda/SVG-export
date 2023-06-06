@@ -31,8 +31,17 @@ public:
 	 **/
 	SVGAnimate();
 
-	// Methods
+	/**
+	 * @brief Constructor, initializes all members with parameters
+	 **/
+	SVGAnimate(const std::string & attribute_name,
+		       const int duration,
+		       const bool calc_mode_spline = false,
+			   const bool repeat_count = 0,
+			   const bool freeze = false);
 
+	// Methods
+	
 	/**
 	 * @brief Implementation of the pure virtual function from Streamable
 	 * @brief Outputs the SVGAnimate to the stream parameter 
@@ -78,6 +87,10 @@ public:
 	 **/
 	virtual void print(std::ostream & os) const = 0;
 
+	/**
+	 * @brief Appends an SVG animation to m_animations
+	 * @param animation The animation to append
+	 **/
 	void addAnimation(const SVGAnimate & animation);
 
 private:
@@ -124,6 +137,10 @@ public:
 	 **/
 	void print(std::ostream & os) const;
 
+	/**
+	 * @brief Appends a shared pointer of an SVGAnimatedElement to m_contained_elements
+	 * @param ptr_element The shared pointer to append
+	 **/
 	void addElement(const std::shared_ptr<SVGAnimatedElement> & ptr_element);
 
 private:

@@ -80,8 +80,22 @@ struct Timeline : public Streamable
 
 	// Methods
 
+	/**
+	 * @brief Adds a key time and a value to the corresponding vector.
+	 * @brief Keeps the vectors sorted by ascending keytime.
+	 * @brief Replaces value if key_time is already in m_key_times
+	 * @param key_time The key time (fraction of m_duration, between 0 and 1)
+	 * @param value The value associated to the key time
+	 **/
 	void addKeyTime(const double key_time, const double value);
 
+	/**
+	 * @brief Adds a key time and a value to the corresponding vector.
+	 * @brief Keeps the vectors sorted by ascending keytime.
+	 * @brief Replaces value if key_time is already in m_key_times
+	 * @param timestamp The timestamp of the key time (between 0 and m_duration)
+	 * @param value The value associated to the key time
+	 **/
 	void addKeyTime(const int timestamp, const double value);
 
 	/**
