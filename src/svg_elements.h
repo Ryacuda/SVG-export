@@ -41,10 +41,10 @@ public:
 	void print(std::ostream & os) const;
 
 private:
-	bool m_calc_mode_spline;			// Wether the animate attribute clacMode is equal to "spline" or not
+	std::string m_attribute_name;		// Name of the attribute
+	Timeline m_timeline;				// Animation duration and key times
 	int m_repeat_count;					// Number of animation loops (value < 0 will be treated as "indefinite")
-	int m_duration;						// Duration of one animation loop (in milliseconds)
-
+	bool m_freeze;						// Whether the animation freezes at the end or snaps back to the initial state
 };	
 
 
@@ -234,19 +234,3 @@ private:
 	double m_thickness;			// Thickness of the line
 	Color m_stroke_color;		// 
 };
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////               Other functions               ////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @brief Template function to output an SVG attribute to a stream
- * @param os The output stream
- * @param attribute_name The name of the attribute
- * @param attribute_value The value associated to the attribute
- **/
-template<class T>
-void streamAttribute(std::ostream & os,
-					const std::string& attribute_name,
-					const T & attribute_value,
-					const std::string & attribute_unit = "");

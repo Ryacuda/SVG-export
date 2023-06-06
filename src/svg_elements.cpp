@@ -172,18 +172,3 @@ void SVGLine::print(std::ostream & os) const
 	streamAttribute(os, "style", "stroke-linecap:round;stroke-linejoin:miter");
 	os << "/>\n";
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////               Other functions               ////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-template<class T>
-void streamAttribute(std::ostream & os,
-					const std::string& attribute_name,
-					const T & attribute_value,
-					const std::string & attribute_unit)
-{
-	os << attribute_name << "=\"" << attribute_value << attribute_unit << "\" ";
-}

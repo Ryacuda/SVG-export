@@ -1,4 +1,5 @@
 #include "svg_elements.h"
+#include "svg_attributes.h"
 
 void test_rect()
 {
@@ -64,6 +65,31 @@ void test_file()
 	}
 }
 
+void tmp_test()
+{
+	std::vector<double> v;		// empty vector
+
+	std::cout << "tmp_test 1 :" << std::endl << (v.begin() == v.end()) << std::endl << std::endl;
+
+	v.push_back(1.0);			// one element vector
+
+	std::cout << "tmp_test 2 :" << std::endl << (v.begin() == v.end()) << std::endl << std::endl;
+
+	std::vector<int> v2(100,100);	// 100 elements vector
+
+	std::cout << "tmp_test 2 :" << std::endl << (++v2.begin() - v2.begin()) << std::endl << std::endl;
+}
+
+void test_timeline()
+{
+	Timeline tl(1000, false);
+
+	tl.addKeyTime(0.0, 10);
+	tl.addKeyTime(1.0, 10);
+	tl.addKeyTime(0.5, 100);
+
+	std::cout << "test_timeline :" << std::endl << tl << std::endl;
+}
 
 int main()
 {
@@ -74,6 +100,10 @@ int main()
 	test_svg();
 
 	test_file();
+
+	tmp_test();
+
+	test_timeline();
 
 	return 0;	
 }
