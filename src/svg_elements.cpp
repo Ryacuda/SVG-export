@@ -16,13 +16,20 @@ SVGAnimate::SVGAnimate()
 
 
 SVGAnimate::SVGAnimate(const std::string & attribute_name,
-		       const int duration,
-		       const bool calc_mode_spline,	// = false
-			   const bool repeat_count,		// = 0
-			   const bool freeze)			// = false
-	: m_attribute_name(attribute_name), m_repeat_count(repeat_count), m_freeze(freeze), m_timeline(duration, calc_mode_spline)
+				       const Timeline & timeline,
+					   const bool repeat_count,		// = 0
+					   const bool freeze)			// = false
+			: m_attribute_name(attribute_name), m_repeat_count(repeat_count), m_freeze(freeze), m_timeline(timeline)
 {
 	//
+}
+
+
+// Setters
+
+void SVGAnimate::setTimeline(const Timeline & timeline)
+{
+	m_timeline = timeline;
 }
 
 
@@ -30,7 +37,20 @@ SVGAnimate::SVGAnimate(const std::string & attribute_name,
 
 void SVGAnimate::print(std::ostream & os) const
 {
-	//
+	// tag
+	os << "<animate ";
+	
+	// attributes
+	streamAttribute(os, "attributeName", m_attribute_name);
+	
+	if(m_repeat_count <= 0) 
+		streamAttribute(os, "repeatCount", "indefinite");
+	else
+		streamAttribute(os, "repeatCount", m_repeat_count);
+
+	if(m_freeze) { streamAttribute(os, "fill", "freeze"); }
+
+	os << m_timeline << "/>\n";
 }
 
 
@@ -55,6 +75,23 @@ void SVGAnimatedElement::addAnimation(const SVGAnimate & animation)
 {
 	m_animations.push_back(animation);
 }
+
+
+void SVGAnimatedElement::printAnimations(std::ostream & os) const
+{
+	for(const SVGAnimate & a : m_animations)
+	{
+		os << a;
+	}
+}
+
+
+int SVGAnimatedElement::animationCount() const
+{
+	return m_animations.size();
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////                   SVGSvg                    ////////////////////////
@@ -91,8 +128,9 @@ void SVGSvg::print(std::ostream & os) const
 	streamAttribute(os, "xmlns", "http://www.w3.org/2000/svg");
 	os << ">\n";
 
-	// the SVG elements contained withing the svg tag ( <svg> ... </svg> )
+	printAnimations(os);
 
+	// the SVG elements contained withing the svg tag ( <svg> ... </svg> )
 	for(std::shared_ptr<SVGAnimatedElement> ptr_e : m_contained_elements)
 	{
 		ptr_e->print(os);
@@ -142,7 +180,17 @@ void SVGRect::print(std::ostream & os) const
 	streamAttribute(os, "width", m_width);
 	streamAttribute(os, "height", m_height);
 	streamAttribute(os, "fill", m_fill_color);
-	os << "/>\n";
+
+	if(animationCount() > 0)
+	{
+		os << ">\n";
+		printAnimations(os);
+		os << "</rect>";
+	}
+	else
+	{
+		os << "/>\n";
+	}
 }
 
 
@@ -174,6 +222,7 @@ SVGLine::SVGLine(double x1, double y1, double x2, double y2, double thickness, c
 void SVGLine::print(std::ostream & os) const
 {
 	os  << "<line ";
+
 	streamAttribute(os, "x1", m_x1);	
 	streamAttribute(os, "y1", m_y1);
 	streamAttribute(os, "x2", m_x2);	
@@ -181,5 +230,15 @@ void SVGLine::print(std::ostream & os) const
 	streamAttribute(os, "stroke-width", m_thickness);
 	streamAttribute(os, "stroke", m_stroke_color);
 	streamAttribute(os, "style", "stroke-linecap:round;stroke-linejoin:miter");
-	os << "/>\n";
+
+	if(animationCount() > 0)
+	{
+		os << ">\n";
+		printAnimations(os);
+		os << "</line>";
+	}
+	else
+	{
+		os << "/>\n";
+	}
 }

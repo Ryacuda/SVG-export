@@ -41,7 +41,7 @@ struct Color : public Streamable
 	 * @brief Outputs the Color to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 private:
 	// Members
@@ -103,7 +103,7 @@ struct Timeline : public Streamable
 	 * @brief Outputs the Color to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 private:
 	// Members

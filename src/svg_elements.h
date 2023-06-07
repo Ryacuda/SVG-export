@@ -35,10 +35,17 @@ public:
 	 * @brief Constructor, initializes all members with parameters
 	 **/
 	SVGAnimate(const std::string & attribute_name,
-		       const int duration,
-		       const bool calc_mode_spline = false,
+		       const Timeline & timeline,
 			   const bool repeat_count = 0,
 			   const bool freeze = false);
+
+	// Setters
+
+	/**
+	 * @brief Sets the timeline of the animation 
+	 * @param timeline The timeline
+	 **/
+	void setTimeline(const Timeline & timeline);
 
 	// Methods
 	
@@ -47,12 +54,12 @@ public:
 	 * @brief Outputs the SVGAnimate to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 private:
 	std::string m_attribute_name;		// Name of the attribute
 	Timeline m_timeline;				// Animation duration and key times
-	int m_repeat_count;					// Number of animation loops (value < 0 will be treated as "indefinite")
+	int m_repeat_count;					// Number of animation loops (value <= 0 will be treated as "indefinite")
 	bool m_freeze;						// Whether the animation freezes at the end or snaps back to the initial state
 };	
 
@@ -92,6 +99,10 @@ public:
 	 * @param animation The animation to append
 	 **/
 	void addAnimation(const SVGAnimate & animation);
+
+	void printAnimations(std::ostream & os) const;
+
+	int animationCount() const;
 
 private:
 	std::vector<SVGAnimate> m_animations;
@@ -135,7 +146,7 @@ public:
 	 * @brief Outputs the SVGSvg to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 	/**
 	 * @brief Appends a shared pointer of an SVGAnimatedElement to m_contained_elements
@@ -190,7 +201,7 @@ public:
 	 * @brief Outputs the SVGRect to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 private:
 	// Members
@@ -240,7 +251,7 @@ public:
 	 * @brief Outputs the SVGLine to the stream parameter 
 	 * @param os The output stream
 	 **/
-	void print(std::ostream & os) const;
+	void print(std::ostream & os) const override;
 
 private:
 	// Members
