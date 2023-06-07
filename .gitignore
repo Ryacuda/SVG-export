@@ -1,6 +1,9 @@
 # file formats to ignore in the root directory
 /*.svg
-/*.dat
 
 # directories to ignore
 /build/
+
+# files to ignore
+/src/main.cpp
+
