@@ -100,8 +100,16 @@ public:
 	 **/
 	void addAnimation(const SVGAnimate & animation);
 
+	/**
+	 * @brief Outputs m_animations to the stream
+	 * @param os The stream output to
+	 **/
 	void printAnimations(std::ostream & os) const;
 
+	/**
+	 * @brief Number of animations in m_animations
+	 * @returns m_animation.size()
+	 **/
 	int animationCount() const;
 
 private:
