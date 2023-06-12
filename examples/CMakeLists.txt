@@ -1,6 +1,7 @@
 SET(EXE_SRC
 	svg_test
     animation_test
+    editing_test
 )
 
 FOREACH(FILE ${EXE_SRC})
