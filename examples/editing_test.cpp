@@ -4,17 +4,17 @@
 
 int main()
 {
-	SVGSvg svg(0,0,120,120);		// svg width and height 120
+	SVG::Svg svg(0,0,120,120);		// svg width and height 120
 
-	Color c(120,180,70);			// RGB values
+	SVG::Color c(120,180,70);			// RGB values
 
-	std::shared_ptr<SVGAnimatedElement> ptr_l2 = std::make_shared<SVGLine>(5, 115, 115, 5, 5, c);	
+	std::shared_ptr<SVG::AnimatedElement> ptr_l2 = std::make_shared<SVG::Line>(5, 115, 115, 5, 5, c);	
 
 	// animation for the line 1
-	Timeline tl(4000, true);			// duration 4s, spline calcMode
+	SVG::Timeline tl(4000, true);			// duration 4s, spline calcMode
 	tl.addKeyTime(0.0, 5);
 	tl.addKeyTime(1.0, 115);
-	SVGAnimate a1("x1", tl, 1, true);
+	SVG::Animation a1("x1", tl, 1, true);
 
 	ptr_l2->addAnimation(a1);
 
@@ -34,7 +34,7 @@ int main()
 		std::cout << "Couldn't open test_editing_1.svg" << std::endl;
 	}
 
-	SVGAnimate * p_a2 = ptr_l2->getAnimation("x1");
+	SVG::Animation * p_a2 = ptr_l2->getAnimation("x1");
 
 	if(!p_a2)
 	{
